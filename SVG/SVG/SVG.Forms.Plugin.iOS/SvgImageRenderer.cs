@@ -10,6 +10,7 @@ using CoreGraphics;
 using Foundation;
 using NGraphics.Custom.Parsers;
 using NGraphics.iOS.Custom;
+using System.Text;
 
 [assembly: ExportRenderer(typeof(SVG.Forms.Plugin.Abstractions.SvgImage), typeof(SvgImageRenderer))]
 namespace SVG.Forms.Plugin.iOS
@@ -39,12 +40,16 @@ namespace SVG.Forms.Plugin.iOS
 
         if (_formsControl != null)
         {
-          var svgStream = _formsControl.SvgAssembly.GetManifestResourceStream(_formsControl.SvgPath);
+          Stream svgStream;
+          if (!string.IsNullOrEmpty(_formsControl.SvgString)) {  
+            svgStream = new MemoryStream (Encoding.UTF8.GetBytes (_formsControl.SvgString));
+          } else {  
+            svgStream = _formsControl.SvgAssembly.GetManifestResourceStream (_formsControl.SvgPath);
 
-          if (svgStream == null)
-          {
-            throw new Exception(string.Format("Error retrieving {0} make sure Build Action is Embedded Resource",
-              _formsControl.SvgPath));
+            if (svgStream == null) {
+              throw new Exception (string.Format ("Error retrieving {0} make sure Build Action is Embedded Resource",
+                _formsControl.SvgPath));
+            }
           }
 
           var r = new SvgReader(new StreamReader(svgStream), new StylesParser(new ValuesParser()), new ValuesParser());

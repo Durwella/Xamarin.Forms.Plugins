@@ -20,6 +20,21 @@ namespace SVG.Forms.Plugin.Abstractions
       set { SetValue(SvgPathProperty, value); }
     }
 
+	/// <summary>
+		/// The SVG as a string
+	/// </summary>
+	public static readonly BindableProperty SvgStringProperty =
+		BindableProperty.Create("SvgString", typeof(string), typeof(SvgImage), default(string));
+
+	/// <summary>
+	/// The SVG as a string
+	/// </summary>
+	public string SvgString
+	{
+		get { return (string)GetValue(SvgStringProperty); }
+		set { SetValue(SvgStringProperty, value); }
+	}
+
     /// <summary>
     /// The assembly containing the svg file
     /// </summary>
